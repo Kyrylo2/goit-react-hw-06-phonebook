@@ -1,21 +1,21 @@
+import React from 'react';
 import ContactsForm from '../components/Form';
 import Filter from '../components/Filter';
-import ContactList from '../components/ContactsList';
-
+import MemoizedContactList from '../components/ContactsList';
 import Typography from '@mui/material/Typography';
-
 import { useSelector } from 'react-redux';
+
+const filterContacts = (contacts, filter) =>
+  contacts.filter(el => el.name.toLowerCase().includes(filter));
 
 export default function App() {
   const contacts = useSelector(state => state.contacts.contactList);
+  const filter = useSelector(state => state.filter);
 
-  const filterRedux = useSelector(state => state.filter);
-
-  const contactsFilterData = filterData =>
-    filterData.filter(el => el.name.toLowerCase().includes(filterRedux));
+  const filteredContacts = filterContacts(contacts, filter);
 
   return (
-    <>
+    <React.Fragment>
       <Typography
         variant="h3"
         variantMapping={{ h3: 'h1' }}
@@ -27,11 +27,11 @@ export default function App() {
 
       <ContactsForm />
 
-      {contacts.length > 1 || filterRedux !== '' ? <Filter /> : null}
+      {contacts.length > 1 || (filter !== '' && <Filter />)}
 
       {contacts.length > 0 && (
-        <ContactList contacts={contactsFilterData(contacts)} />
+        <MemoizedContactList contacts={filteredContacts} />
       )}
-    </>
+    </React.Fragment>
   );
 }

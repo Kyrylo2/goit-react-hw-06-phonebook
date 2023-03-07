@@ -1,21 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
+import React, { useCallback } from 'react';
 import TextField from '@mui/material/TextField';
 import { FormControl } from '@mui/material';
-
 import { useDispatch } from 'react-redux';
 import { setFilterValue } from 'redux/filter/filterSlice';
 
-// export default function Filter({ filterDataToState }) {
-export default function Filter({ filterDataToState }) {
+function Filter() {
   const dispatch = useDispatch();
-  const setFilterData = e => {
-    let value = e.currentTarget.value.toLowerCase();
 
-    dispatch(setFilterValue(value));
-    // filterDataToState(value);
-  };
+  const setFilterData = useCallback(
+    e => {
+      const { value } = e.currentTarget;
+      const valueLowercase = value.toLowerCase();
+      dispatch(setFilterValue(valueLowercase));
+    },
+    [dispatch]
+  );
 
   return (
     <FormControl
@@ -27,7 +26,6 @@ export default function Filter({ filterDataToState }) {
       }}
     >
       <TextField
-        // size="small"
         id="outlined-basic"
         label="Filter"
         variant="outlined"
@@ -39,6 +37,4 @@ export default function Filter({ filterDataToState }) {
   );
 }
 
-Filter.propTypes = {
-  filterDataToState: PropTypes.func.isRequired,
-};
+export default React.memo(Filter);
