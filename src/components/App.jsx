@@ -27,7 +27,7 @@ export default function App() {
 
       <ContactsForm />
 
-      {contacts.length > 1 || (filter !== '' && <Filter />)}
+      {contacts.length > 1 || filter !== '' ? <Filter /> : null}
 
       {contacts.length > 0 && (
         <MemoizedContactList contacts={filteredContacts} />
